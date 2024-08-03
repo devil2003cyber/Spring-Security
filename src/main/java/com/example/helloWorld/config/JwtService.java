@@ -15,11 +15,19 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+
 @Service
 public class JwtService  {
 	
 	private static final String SECRECT_KEY = "43e2f82188928c60d9aae27022c2bf0470f8d3851bf9a34e9d9d39e0adea0bce";
-	
+
+	 
+	 @org.springframework.beans.factory.annotation.Value("${application.security.jwt.expiration}")
+	  private long jwtExpiration;
+	  
+	  @org.springframework.beans.factory.annotation.Value("${application.security.jwt.refresh-token.expiration}")
+	  private long refreshExpiration;
+	  
 	public  String extarctUsername(String token)
     {
         return extractClaim(token, Claims::getSubject);//
@@ -37,12 +45,24 @@ public class JwtService  {
 			Map<String,Object> extraClaims,
 			UserDetails userDetails
 			) {
+		return buidToken(extraClaims,userDetails,jwtExpiration);
+				
+	}
+	public String generateRefreshToken( UserDetails userDetails) {
+		// TODO Auto-generated method stub
+		return buidToken(new HashMap<>(), userDetails , refreshExpiration);
+	}
+
+	public String buidToken(
+			Map<String,Object> extraClaims,
+			UserDetails userDetails , long expiration
+			) {
 		return Jwts
 				.builder()
 				.setClaims(extraClaims)
 				.setSubject(userDetails.getUsername())
 				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis()  +1000 *60 *24))
+				.setExpiration(new Date(System.currentTimeMillis()  + expiration))
 				.signWith(getSignInKey(),SignatureAlgorithm.HS256)
 				.compact();//
 				

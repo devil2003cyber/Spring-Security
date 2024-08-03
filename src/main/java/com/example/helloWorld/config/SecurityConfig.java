@@ -55,15 +55,30 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import static com.example.helloWorld.user.permission.ADMIN_CREATE;
+import static com.example.helloWorld.user.permission.ADMIN_DELETE;
+import static com.example.helloWorld.user.permission.ADMIN_READ;
+import static com.example.helloWorld.user.permission.ADMIN_UPDATE;
+import static com.example.helloWorld.user.permission.MANAGER_CREATE;
+import static com.example.helloWorld.user.permission.MANAGER_DELETE;
+import static com.example.helloWorld.user.permission.MANAGER_READ;
+import static com.example.helloWorld.user.permission.MANAGER_UPDATE;
+import static com.example.helloWorld.user.Role.ADMIN;
 
 import lombok.RequiredArgsConstructor;
-
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpMethod.DELETE;;
 @Configuration
 @EnableWebSecurity
 //@RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig {
 
+
+	
+	
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     @Autowired
